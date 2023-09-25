@@ -7,12 +7,16 @@ def count_lines(filepath: str):
         return f.read().count("\n")
 
 def has_extension(filepath: str, extensions: list):
+    """Returns True if filepath has any of the extensions in the
+    extensions list"""
     for extension in extensions:
         if filepath.endswith(extension):
             return True
     return False
 
 def main(path: str, extensions: list):
+    """Count number of lines in all the files in a directory that has
+    an extension that is in extensions list."""
     count = 0
     for path, _, files in os.walk(path):
         for filepath in files:
