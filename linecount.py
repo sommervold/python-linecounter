@@ -22,4 +22,4 @@ def main(path: str, extensions: list):
 
 
 if __name__ == "__main__":
-    print(main(*sys.argv[1], sys.argv[2:]))
+    print(main(sys.argv[1], sys.argv[2:]))
