@@ -3,8 +3,12 @@ import sys
 
 def count_lines(filepath: str):
     """Returns number of newline characters in a file"""
-    with open(filepath, "r") as f:
-        return f.read().count("\n")
+    try:
+        with open(filepath, "r") as f:
+            return f.read().count("\n")
+    except UnicodeDecodeError as e:
+        # Likely a binary file, skip.
+        return 0
 
 def has_extension(filepath: str, extensions: list):
     """Returns True if filepath has any of the extensions in the
