@@ -1,5 +1,6 @@
 import os
 import sys
+import argparse
 
 def count_lines(filepath: str):
     """Returns number of newline characters in a file"""
@@ -10,7 +11,7 @@ def count_lines(filepath: str):
         # Likely a binary file, skip.
         return 0
 
-def has_extension(filepath: str, extensions: list):
+def has_extension(filepath: str, extensions: list[str]):
     """Returns True if filepath has any of the extensions in the
     extensions list"""
     for extension in extensions:
@@ -18,7 +19,7 @@ def has_extension(filepath: str, extensions: list):
             return True
     return False
 
-def main(path: str, extensions: list):
+def main(path: str, extensions: list[str], exclude: list[str]):
     """Count number of lines in all the files in a directory that has
     an extension that is in extensions list."""
     count = 0
@@ -28,6 +29,18 @@ def main(path: str, extensions: list):
                 count += count_lines(os.path.join(path, filepath))
     return count
 
+class _LinecountNamespace(argparse.Namespace):
+    path: str
+    exclude: list[str]
+    extensions: list[str]
+
 
 if __name__ == "__main__":
-    print(main(sys.argv[1], sys.argv[2:]))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-p", "--path", default=".", )
+    parser.add_argument("-x", "--exclude", action="append")
+    parser.add_argument("-e", "--extension", action="append", help="Files with this extension will be included.")
+    
+    args: _LinecountNamespace = parser.parse_args()
+    result = main(args.path, args.extensions, args.exclude)
+
