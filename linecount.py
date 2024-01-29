@@ -37,8 +37,8 @@ def main(path: str, extensions: list[str], ignore: list[str]):
 
 class _LinecountNamespace(argparse.Namespace):
     path: str
-    exclude: list[str]
-    extensions: list[str]
+    ignore: list[str]
+    extension: list[str]
 
 
 if __name__ == "__main__":
@@ -53,7 +53,7 @@ if __name__ == "__main__":
         "--ignore",
         action="append",
         default=[],
-        help="Files and directories with this name will be ignored.",
+        help="Directories with this name will be ignored.",
     )
     parser.add_argument(
         "-e",
@@ -64,4 +64,4 @@ if __name__ == "__main__":
     )
 
     args: _LinecountNamespace = parser.parse_args()
-    result = main(args.path, args.extensions, args.exclude)
+    result = main(args.path, args.extension, args.ignore)
