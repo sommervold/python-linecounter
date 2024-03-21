@@ -23,27 +23,28 @@ def has_extension(filepath: str, extensions: list[str]):
     return False
 
 
-def main(path: str, extensions: list[str], ignore: list[str]):
+def main(paths: list[str], extensions: list[str], ignore: list[str]):
     """Count number of lines in all the files in a directory that has
     an extension that is in extensions list."""
     count = 0
-    for path, dirnames, files in os.walk(path, topdown=True):
+    for path in paths:
+        for path, dirnames, files in os.walk(path, topdown=True):
 
-        # os.walk will only search directories present in dirnames.
-        for dir in ignore:
-            if dir in dirnames:
-                dirnames.remove(dir)
+            # os.walk will only search directories present in dirnames.
+            for dir in ignore:
+                if dir in dirnames:
+                    dirnames.remove(dir)
 
-        if os.path.basename(path) in ignore:
-            continue
-        for filepath in files:
-            if has_extension(filepath, extensions):
-                count += count_lines(os.path.join(path, filepath))
+            if os.path.basename(path) in ignore:
+                continue
+            for filepath in files:
+                if has_extension(filepath, extensions):
+                    count += count_lines(os.path.join(path, filepath))
     return count
 
 
 class _LinecountNamespace(argparse.Namespace):
-    path: str
+    path: list[str]
     ignore: list[str]
     extension: list[str]
 
@@ -53,7 +54,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "-p",
         "--path",
-        default=".",
+        action="append",
+        default=[],
+        help="Directories that should be searched"
     )
     parser.add_argument(
         "-i",
